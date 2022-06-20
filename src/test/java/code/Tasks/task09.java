@@ -1,10 +1,16 @@
 package code.Tasks;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utilities.WebDriverutil;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class task09 {
@@ -35,8 +41,29 @@ public class task09 {
 
     }
     @Test
-    public void TC1(){
+    public void TC1() throws InterruptedException {
 
+        driver.getWindowHandle();
+        driver.findElement(By.id("iframeResult"));
+        driver.switchTo().frame("iframeResult");
+        Thread.sleep(5000);
+        WebElement link=driver.findElement(By.linkText("Visit W3Schools.com!"));
+        link.click();
 
+        Set<String> allWindowsHandles=driver.getWindowHandles();
+        List<String>windowsList=new ArrayList<>(allWindowsHandles);
+
+        driver.switchTo().window(windowsList.get(1));
+        driver.getWindowHandle();
+
+        WebElement Logo= driver.findElement(By.xpath("//i[@class='fa fa-logo']"));
+        Assert.assertTrue(Logo.isDisplayed(),"Logo is not displayed.");
+        driver.switchTo().window(windowsList.get(0));
+        driver.getWindowHandle();
+
+        WebElement runButton=driver.findElement(By.id("runbtn"));
+        runButton.getText();
+
+        Assert.assertFalse(runButton.getText().contains("Run >"),"it contains the Run >' text");
     }
 }
